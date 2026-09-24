@@ -1,0 +1,765 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail documentaire</title><style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        background: #f5f6f8;
+        color: #333;
+    }
+
+    /* =========================
+       PAGE D'ACCUEIL
+       ========================= */
+
+    #landing {
+        min-height: 100vh;
+        background: #ffffff;
+    }
+
+    .browser-bar {
+        height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 16px;
+        background: #f4f5f7;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .browser-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .red {
+        background: #ff605c;
+    }
+
+    .yellow {
+        background: #ffbd44;
+    }
+
+    .green {
+        background: #00ca4e;
+    }
+
+    .address {
+        margin-left: 12px;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .landing-content {
+        min-height: calc(100vh - 46px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .document-icon {
+        width: 68px;
+        height: 68px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 22px;
+        border-radius: 50%;
+        background: #e8f1ff;
+        color: #1769e0;
+        font-size: 32px;
+    }
+
+    .landing-content h1 {
+        margin: 0 0 10px;
+        font-size: 27px;
+        font-weight: 600;
+    }
+
+    .landing-content p {
+        max-width: 420px;
+        margin: 0 0 30px;
+        color: #777;
+        line-height: 1.5;
+    }
+
+    #openButton {
+        padding: 13px 30px;
+        border: 0;
+        border-radius: 7px;
+        background: #1769e0;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transition: background 0.15s ease;
+    }
+
+    #openButton:hover {
+        background: #1258bd;
+    }
+
+    .version {
+        margin-top: 20px;
+        color: #aaa;
+        font-size: 12px;
+    }
+
+    /* =========================
+       FAUX TERMINAL
+       ========================= */
+
+    #terminal {
+        display: none;
+        min-height: 100vh;
+        background: #000;
+        color: #00ff55;
+        padding: 18px;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    .terminal-header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #064d1d;
+        font-size: 13px;
+    }
+
+    .terminal-title {
+        font-weight: bold;
+    }
+
+    #clock {
+        color: #00aa3a;
+    }
+
+    #logs {
+        height: 360px;
+        margin-top: 14px;
+        overflow: hidden;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .log-line {
+        white-space: nowrap;
+    }
+
+    .log-ok {
+        color: #00ff55;
+    }
+
+    .log-warning {
+        color: #ffff00;
+    }
+
+    .log-danger {
+        color: #ff4444;
+    }
+
+    .progress-container {
+        margin-top: 20px;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        font-size: 13px;
+    }
+
+    .progress-border {
+        height: 18px;
+        padding: 2px;
+        border: 1px solid #087528;
+    }
+
+    #progressBar {
+        width: 0%;
+        height: 100%;
+        background: #00d94f;
+        transition: width 0.25s linear;
+    }
+
+    #status {
+        margin-top: 9px;
+        color: #ff3333;
+        font-size: 12px;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        50% {
+            opacity: 0.35;
+        }
+    }
+
+    /* =========================
+       REVELATION
+       ========================= */
+
+    #prankMessage {
+        display: none;
+        max-width: 650px;
+        margin: 30px auto 0;
+        padding: 22px;
+        border: 1px solid #087528;
+        border-radius: 6px;
+        background: rgba(0, 80, 20, 0.18);
+    }
+
+    #prankMessage h2 {
+        margin: 0 0 12px;
+        color: #00ff55;
+        font-size: 22px;
+    }
+
+    #prankMessage p {
+        margin: 8px 0;
+        color: #8affaa;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .terminal-button {
+        padding: 9px 14px;
+        border: 1px solid #00aa3a;
+        border-radius: 4px;
+        background: transparent;
+        color: #00ff55;
+        font-family: inherit;
+        cursor: pointer;
+    }
+
+    .terminal-button:hover {
+        background: #003d12;
+    }
+
+    .terminal-button.primary {
+        background: #00aa3a;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .terminal-button.primary:hover {
+        background: #00cc47;
+    }
+
+    .escape-info {
+        margin-top: 12px !important;
+        color: #4c995f !important;
+        font-size: 12px !important;
+    }
+
+    @media (max-width: 600px) {
+        #terminal {
+            padding: 12px;
+        }
+
+        #logs {
+            height: 300px;
+            font-size: 11px;
+        }
+
+        .landing-content h1 {
+            font-size: 23px;
+        }
+    }
+</style>
+
+</head><body><!-- =========================
+     PAGE NORMALE
+     ========================= -->
+
+<section id="landing">
+
+    <div class="browser-bar">
+        <span class="browser-dot red"></span>
+        <span class="browser-dot yellow"></span>
+        <span class="browser-dot green"></span>
+
+        <span class="address">
+            portail-documentaire.local
+        </span>
+    </div>
+
+    <div class="landing-content">
+
+        <div class="document-icon">
+            📄
+        </div>
+
+        <h1>Portail documentaire</h1>
+
+        <p>
+            Accès aux procédures internes et aux documents qualité.
+        </p>
+
+        <button id="openButton">
+            Afficher la page
+        </button>
+
+        <div class="version">
+            Version 3.2.1 · Service informatique
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FAUX TERMINAL
+     ========================= -->
+
+<section id="terminal">
+
+    <div class="terminal-header">
+        <span class="terminal-title">
+            SYSTEM SECURITY TERMINAL
+        </span>
+
+        <span id="clock">
+            --:--:--
+        </span>
+    </div>
+
+
+    <div id="logs"></div>
+
+
+    <div class="progress-container">
+
+        <div class="progress-info">
+            <span>DATA EXTRACTION</span>
+            <span id="percentage">0%</span>
+        </div>
+
+        <div class="progress-border">
+            <div id="progressBar"></div>
+        </div>
+
+        <div id="status">
+            DO NOT CLOSE THIS WINDOW
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MESSAGE FINAL
+         ========================= -->
+
+    <div id="prankMessage">
+
+        <h2>😂 PRANK !</h2>
+
+        <p>
+            Aucun piratage n'a eu lieu.
+        </p>
+
+        <p>
+            Tu viens simplement de te faire piéger par une fausse
+            interface de terminal.
+        </p>
+
+        <div class="buttons">
+
+            <button
+                id="exitFullscreen"
+                class="terminal-button primary">
+                Quitter le plein écran
+            </button>
+
+            <button
+                id="restart"
+                class="terminal-button">
+                Rejouer
+            </button>
+
+        </div>
+
+        <p class="escape-info">
+            💡 Tu peux également appuyer sur Échap pour quitter le
+            plein écran.
+        </p>
+
+    </div>
+
+</section>
+
+
+<script>
+
+    /* =========================
+       ÉLÉMENTS DOM
+       ========================= */
+
+    const landing = document.getElementById("landing");
+    const terminal = document.getElementById("terminal");
+
+    const openButton = document.getElementById("openButton");
+
+    const logs = document.getElementById("logs");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const percentage =
+        document.getElementById("percentage");
+
+    const status =
+        document.getElementById("status");
+
+    const prankMessage =
+        document.getElementById("prankMessage");
+
+    const clock =
+        document.getElementById("clock");
+
+
+    /* =========================
+       FAUSSES LIGNES TERMINAL
+       ========================= */
+
+    const logEntries = [
+
+        "[ OK ] Initializing secure connection...",
+        "[ OK ] Gateway connection established",
+        "[ OK ] Remote host identified",
+        "[ OK ] Firewall analysis complete",
+        "[ OK ] Security protocol bypassed",
+        "[...] Scanning local network...",
+        "[ OK ] Network nodes discovered",
+        "[...] Enumerating user accounts...",
+        "[ OK ] User database detected",
+        "[...] Requesting elevated privileges...",
+        "[ OK ] Privilege escalation complete",
+        "[...] Accessing encrypted storage...",
+        "[ OK ] Encryption key identified",
+        "[...] Preparing data extraction...",
+        "[...] Reading system files...",
+        "[ OK ] System files indexed",
+        "[...] Searching documents...",
+        "[ OK ] Documents identified",
+        "[...] Compressing data archive...",
+        "[ OK ] Archive created",
+        "[...] Preparing secure transfer...",
+        "[...] Establishing remote tunnel...",
+        "[ OK ] Remote tunnel established",
+        "[...] Beginning data extraction...",
+        "[...] Transferring encrypted archive...",
+        "[...] Verifying transferred data...",
+        "[ OK ] Data integrity check passed",
+        "[...] Cleaning temporary files...",
+        "[ OK ] Temporary files removed",
+        "[...] Finalizing operation..."
+
+    ];
+
+
+    /* =========================
+       HORLOGE
+       ========================= */
+
+    function updateClock() {
+
+        const now = new Date();
+
+        clock.textContent =
+            now.toLocaleTimeString("fr-FR");
+
+    }
+
+    updateClock();
+
+    setInterval(updateClock, 1000);
+
+
+    /* =========================
+       DÉMARRAGE DU PRANK
+       ========================= */
+
+    openButton.addEventListener("click", async () => {
+
+        /*
+         * Le clic utilisateur autorise le plein écran.
+         */
+
+        try {
+
+            if (document.documentElement.requestFullscreen) {
+
+                await document.documentElement.requestFullscreen();
+
+            }
+
+        } catch (error) {
+
+            /*
+             * Si le navigateur refuse le plein écran,
+             * le prank continue malgré tout.
+             */
+
+            console.log(
+                "Fullscreen non disponible",
+                error
+            );
+
+        }
+
+
+        /*
+         * Remplacement de la page normale
+         * par le faux terminal.
+         */
+
+        landing.style.display = "none";
+        terminal.style.display = "block";
+
+
+        startSimulation();
+
+    });
+
+
+    /* =========================
+       SIMULATION
+       ========================= */
+
+    function startSimulation() {
+
+        let progress = 0;
+
+        let logIndex = 0;
+
+
+        /*
+         * Durée cible :
+         * environ 30 secondes.
+         */
+
+        const duration = 30000;
+
+        const interval = 250;
+
+        const totalSteps =
+            duration / interval;
+
+
+        /*
+         * Progression moyenne nécessaire
+         * pour atteindre 100 % en 30 secondes.
+         */
+
+        const averageIncrement =
+            100 / totalSteps;
+
+
+        const timer = setInterval(() => {
+
+            /*
+             * Ajout d'une ligne de terminal.
+             */
+
+            addLogLine(
+                logEntries[
+                    logIndex % logEntries.length
+                ]
+            );
+
+            logIndex++;
+
+
+            /*
+             * Progression légèrement irrégulière.
+             *
+             * Cela évite d'avoir une progression
+             * parfaitement linéaire.
+             */
+
+            const variation =
+                (Math.random() - 0.5) *
+                averageIncrement *
+                1.4;
+
+            progress +=
+                averageIncrement + variation;
+
+
+            /*
+             * On évite de dépasser 99 %
+             * avant la dernière étape.
+             */
+
+            if (progress >= 99) {
+
+                progress = 99;
+
+            }
+
+
+            updateProgress(progress);
+
+
+        }, interval);
+
+
+        /*
+         * Fin forcée à environ 30 secondes.
+         */
+
+        setTimeout(() => {
+
+            clearInterval(timer);
+
+            finishSimulation();
+
+        }, duration);
+
+    }
+
+
+    /* =========================
+       AJOUT D'UNE LIGNE
+       ========================= */
+
+    function addLogLine(text) {
+
+        const line =
+            document.createElement("div");
+
+        line.className = "log-line";
+
+        line.textContent = "> " + text;
+
+        logs.appendChild(line);
+
+
+        /*
+         * On conserve uniquement
+         * les dernières lignes visibles.
+         */
+
+        while (logs.children.length > 18) {
+
+            logs.removeChild(
+                logs.firstChild
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       PROGRESSION
+       ========================= */
+
+    function updateProgress(value) {
+
+        const rounded =
+            Math.floor(value);
+
+        progressBar.style.width =
+            rounded + "%";
+
+        percentage.textContent =
+            rounded + "%";
+
+    }
+
+
+    /* =========================
+       FIN DU PRANK
+       ========================= */
+
+    function finishSimulation() {
+
+        updateProgress(100);
+
+        percentage.textContent = "100%";
+
+        status.textContent =
+            "TRANSFER COMPLETE";
+
+        status.style.color =
+            "#00ff55";
+
+        status.style.animation =
+            "none";
+
+
+        /*
+         * Petit délai avant d'afficher
+         * la révélation.
+         */
+
+        setTimeout(() => {
+
+            prankMessage.style.display =
+                "block";
+
+        }, 1000);
+
+    }
+
+
+    /* =========================
+       QUITTER LE PLEIN ÉCRAN
+       ========================= */
+
+    document
+        .getElementById("exitFullscreen")
+        .addEventListener("click", () => {
+
+            if (document.fullscreenElement) {
+
+                document.exitFullscreen();
+
+            }
+
+        });
+
+
+    /* =========================
+       REJOUER
+       ========================= */
+
+    document
+        .getElementById("restart")
+        .addEventListener("click", () => {
+
+            location.reload();
+
+        });
+
+</script>
+
+</body>
+          </html>
